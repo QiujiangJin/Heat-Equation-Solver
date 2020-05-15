@@ -1,0 +1,22 @@
+# -*-sh-*-
+
+[mesh]
+
+dimension = 1			# 1 = one dimension, 2 = two dimension
+xmin = 0 			# min x location [m]
+xmax = 1 			# max x location [m]
+ymin = 0 			# min y location [m]
+ymax = 1 			# max x location [m]
+nx = 100			# number of mesh points in x-direction
+ny = 100			# number of mesh points in y-direction
+
+[solver]
+
+fd_method = 2			# 2 = second order, 4 = fourth order
+iter_method = 'Gauss-Seidel'  	# choose Jacobi or Gauss-Seidel
+verify_mode = 0 		# verification mode (0 = use, 1 = unuse)
+output_mode = 0 		# output mode (0 = standard, 1 = debug)
+k = 1.0 			# thermal conductivity
+eps = 1.0e-12 			# iterative solver tolerance
+max_iter = 300000 		# max solver iterations
+output_file = 'output.h5'	# name of the output file
