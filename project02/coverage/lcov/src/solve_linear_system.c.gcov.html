@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - Project 1 - src/solve_linear_system.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - solve_linear_system.c<span style="font-size: 80%;"> (source / <a href="solve_linear_system.c.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">Project 1</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">44</td>
+            <td class="headerCovTableEntry">48</td>
+            <td class="headerCovTableEntryHi">91.7 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-14 22:06:44</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*************************************************************************************</a>
+<span class="lineNum">       2 </span>            :  * This function solves the lienar system using Jacobi method or Gauss Seidel method
+<span class="lineNum">       3 </span>            :  * **********************************************************************************/
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">       6 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       7 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">       8 </span>            : #include &lt;grvy.h&gt;
+<span class="lineNum">       9 </span>            : #include &quot;laplace.h&quot;
+<a name="10"><span class="lineNum">      10 </span>            : #include &quot;function.h&quot;</a>
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span><span class="lineCov">          6 : void solve_linear_system(Laplace* solver) {</span>
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span><span class="lineCov">          6 :     grvy_timer_begin(__func__);</span>
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span><span class="lineCov">          6 :     if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      17 </span><span class="lineNoCov">          0 :         printf(&quot;[debug]: solve system - function begin\n\n\n&quot;);</span>
+<span class="lineNum">      18 </span>            :     }
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span><span class="lineCov">          6 :     printf(&quot;** Solving linear system...\n&quot;);</span>
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span><span class="lineCov">          6 :     int N = solver-&gt;nx;</span>
+<span class="lineNum">      23 </span><span class="lineCov">          6 :     if(solver-&gt;dimension == 2) {</span>
+<span class="lineNum">      24 </span><span class="lineCov">          3 :         N = (N-1)*(N-1) + 1;</span>
+<span class="lineNum">      25 </span>            :     }
+<span class="lineNum">      26 </span><span class="lineCov">          6 :     int iter = 0;</span>
+<span class="lineNum">      27 </span><span class="lineCov">          6 :     int max_iter = solver-&gt;max_iter;</span>
+<span class="lineNum">      28 </span><span class="lineCov">          6 :     double eps = solver-&gt;eps;</span>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            :     // this vector is to store the values of the vector form last iteration    
+<span class="lineNum">      31 </span><span class="lineCov">          6 :     double *x_vec = (double* )malloc((N-1)*sizeof(double));</span>
+<span class="lineNum">      32 </span><span class="lineCov">          6 :     double err = 1.0;</span>
+<span class="lineNum">      33 </span>            :     
+<span class="lineNum">      34 </span><span class="lineCov">          6 :     if(strcmp(solver-&gt;iter_method, &quot;Jacobi&quot;) == 0) {</span>
+<span class="lineNum">      35 </span>            :         // case of Jacobi method
+<span class="lineNum">      36 </span><span class="lineCov">      56288 :         while(iter &lt; max_iter &amp;&amp; err &gt;= eps) {</span>
+<span class="lineNum">      37 </span><span class="lineCov">      56286 :             if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      38 </span><span class="lineNoCov">          0 :                 printf(&quot;current convergence error = %.12f\n&quot;, err);</span>
+<span class="lineNum">      39 </span>            :             }
+<span class="lineNum">      40 </span><span class="lineCov">      56286 :             memcpy(x_vec, solver-&gt;sol_vec, (N-1)*sizeof(double));</span>
+<span class="lineNum">      41 </span><span class="lineCov">  209564640 :             for(int i = 0; i &lt; N-1; i++) {</span>
+<span class="lineNum">      42 </span>            :                 double s = 0.0;
+<span class="lineNum">      43 </span>            :                 int diag = 0;
+<span class="lineNum">      44 </span><span class="lineCov"> 1032164650 :                 for(int j = 0; j &lt; solver-&gt;length[i]; j++) {</span>
+<span class="lineNum">      45 </span><span class="lineCov"> 1032164650 :                     int index = solver-&gt;matrix_index[i][j];</span>
+<span class="lineNum">      46 </span><span class="lineCov"> 1032164650 :                     if(index != i) {</span>
+<span class="lineNum">      47 </span><span class="lineCov">  822656296 :                         s += solver-&gt;matrix_value[i][j]*x_vec[index];</span>
+<span class="lineNum">      48 </span>            :                     } else {
+<span class="lineNum">      49 </span>            :                         diag = j;
+<span class="lineNum">      50 </span>            :                     }
+<span class="lineNum">      51 </span>            :                 }
+<span class="lineNum">      52 </span><span class="lineCov">  209508354 :                 solver-&gt;sol_vec[i] = (solver-&gt;rht_vec[i] - s)/solver-&gt;matrix_value[i][diag];</span>
+<span class="lineNum">      53 </span>            :             }   
+<span class="lineNum">      54 </span><span class="lineCov">      56286 :             iter += 1;</span>
+<span class="lineNum">      55 </span><span class="lineCov">      56286 :             err = error_l2(solver, x_vec);</span>
+<span class="lineNum">      56 </span>            :         }
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :     } else {
+<span class="lineNum">      59 </span>            :         // case of Gauss Seidel method
+<span class="lineNum">      60 </span><span class="lineCov">      60255 :         while(iter &lt; max_iter &amp;&amp; err &gt;= eps) {                  </span>
+<span class="lineNum">      61 </span><span class="lineCov">      60251 :             if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :                 printf(&quot;current convergence error = %.12f\n&quot;, err);</span>
+<span class="lineNum">      63 </span>            :             }
+<span class="lineNum">      64 </span><span class="lineCov">      60251 :             memcpy(x_vec, solver-&gt;sol_vec, (N-1)*sizeof(double));</span>
+<span class="lineNum">      65 </span><span class="lineCov">  241929230 :             for(int i = 0; i &lt; N-1; i++) {</span>
+<span class="lineNum">      66 </span>            :                 double s = 0.0;
+<span class="lineNum">      67 </span>            :                 int diag = 0;
+<span class="lineNum">      68 </span><span class="lineCov"> 1708708053 :                 for(int j = 0; j &lt; solver-&gt;length[i]; j++) {</span>
+<span class="lineNum">      69 </span><span class="lineCov"> 1708708053 :                     int index = solver-&gt;matrix_index[i][j];</span>
+<span class="lineNum">      70 </span><span class="lineCov"> 1708708053 :                     if(index &lt; i) {</span>
+<span class="lineNum">      71 </span><span class="lineCov">  733419537 :                         s += solver-&gt;matrix_value[i][j]*solver-&gt;sol_vec[index];</span>
+<span class="lineNum">      72 </span><span class="lineCov">  975288516 :                     } else if(index == i){</span>
+<span class="lineNum">      73 </span>            :                         diag = j;
+<span class="lineNum">      74 </span>            :                     } else {
+<span class="lineNum">      75 </span><span class="lineCov">  733419537 :                         s += solver-&gt;matrix_value[i][j]*x_vec[index];</span>
+<span class="lineNum">      76 </span>            :                     }
+<span class="lineNum">      77 </span>            :                 }
+<span class="lineNum">      78 </span><span class="lineCov">  241868979 :                 solver-&gt;sol_vec[i] = (solver-&gt;rht_vec[i] - s)/solver-&gt;matrix_value[i][diag];</span>
+<span class="lineNum">      79 </span>            :             }
+<span class="lineNum">      80 </span><span class="lineCov">      60251 :             iter += 1;</span>
+<span class="lineNum">      81 </span><span class="lineCov">      60251 :             err = error_l2(solver, x_vec);</span>
+<span class="lineNum">      82 </span>            :         }
+<span class="lineNum">      83 </span>            :     
+<span class="lineNum">      84 </span>            :     }
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span><span class="lineCov">          6 :     printf(&quot;--&gt; Terminated at iteration: %i\n&quot;, iter);</span>
+<span class="lineNum">      87 </span><span class="lineCov">          6 :     printf(&quot;--&gt; The error norm: %.12f\n&quot;, error_l2(solver, x_vec));</span>
+<span class="lineNum">      88 </span><span class="lineCov">          6 :     printf(&quot;--&gt; The residual norm: %.12f\n\n\n&quot;, res_norm(solver));</span>
+<span class="lineNum">      89 </span>            : 
+<span class="lineNum">      90 </span><span class="lineCov">          6 :     free(x_vec);</span>
+<span class="lineNum">      91 </span>            :     
+<span class="lineNum">      92 </span><span class="lineCov">          6 :     if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :         printf(&quot;[debug]: solve system - function end\n\n\n&quot;);</span>
+<span class="lineNum">      94 </span>            :     }
+<span class="lineNum">      95 </span>            : 
+<span class="lineNum">      96 </span><span class="lineCov">          6 :     grvy_timer_end(__func__);</span>
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span><span class="lineCov">          6 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

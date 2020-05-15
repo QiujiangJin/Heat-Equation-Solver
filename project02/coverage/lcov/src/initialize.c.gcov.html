@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - Project 1 - src/initialize.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - initialize.c<span style="font-size: 80%;"> (source / <a href="initialize.c.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">Project 1</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntryHi">90.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2018-12-14 22:06:44</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /******************************************************************************************</a>
+<span class="lineNum">       2 </span>            :  * This function initializes all the other variables in the solver like matrix and vector
+<span class="lineNum">       3 </span>            :  * ***************************************************************************************/
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">       6 </span>            : #include &lt;stdlib.h&gt;
+<span class="lineNum">       7 </span>            : #include &lt;grvy.h&gt;
+<span class="lineNum">       8 </span>            : #include &quot;laplace.h&quot;
+<a name="9"><span class="lineNum">       9 </span>            : #include &quot;function.h&quot;</a>
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span><span class="lineCov">          6 : void initialize(Laplace* solver) {</span>
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span><span class="lineCov">          6 :     grvy_timer_begin(__func__);</span>
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            :     // print the information of masa solution
+<span class="lineNum">      16 </span><span class="lineCov">          6 :     if(solver-&gt;dimension == 1) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">          3 :         printf(&quot;MASA :: Solution has 2 variables.\n&quot;);</span>
+<span class="lineNum">      18 </span><span class="lineCov">          3 :         printf(&quot;*-------------------------------------*\n&quot;);</span>
+<span class="lineNum">      19 </span><span class="lineCov">          3 :         printf(&quot;A_x is set to: 10.0\n&quot;);</span>
+<span class="lineNum">      20 </span><span class="lineCov">          3 :         printf(&quot;k_0 is set to: 1.0\n&quot;);</span>
+<span class="lineNum">      21 </span><span class="lineCov">          3 :         printf(&quot;*-------------------------------------*\n\n\n&quot;);</span>
+<span class="lineNum">      22 </span>            :     } else {
+<span class="lineNum">      23 </span><span class="lineCov">          3 :         printf(&quot;MASA :: Solution has 3 variables.\n&quot;);</span>
+<span class="lineNum">      24 </span><span class="lineCov">          3 :         printf(&quot;*-------------------------------------*\n&quot;);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          3 :         printf(&quot;A_x is set to: 10.0\n&quot;);</span>
+<span class="lineNum">      26 </span><span class="lineCov">          3 :         printf(&quot;B_y is set to: 10.0\n&quot;);</span>
+<span class="lineNum">      27 </span><span class="lineCov">          3 :         printf(&quot;k_0 is set to: 1.0\n&quot;);</span>
+<span class="lineNum">      28 </span><span class="lineCov">          3 :         printf(&quot;*-------------------------------------*\n\n\n&quot;);</span>
+<span class="lineNum">      29 </span>            :     }
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span><span class="lineCov">          6 :     if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :         printf(&quot;debug modes is launched\n&quot;);</span>
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :         printf(&quot;[debug]: initialization - function begin\n\n\n&quot;);</span>
+<span class="lineNum">      34 </span>            :     }
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span><span class="lineCov">          6 :     printf(&quot;** Initializing data structures...\n\n\n&quot;);</span>
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span><span class="lineCov">          6 :     solver-&gt;h = (solver-&gt;xmax - solver-&gt;xmin)/solver-&gt;nx;</span>
+<span class="lineNum">      39 </span><span class="lineCov">          6 :     int N = solver-&gt;nx - 1;</span>
+<span class="lineNum">      40 </span><span class="lineCov">          6 :     if(solver-&gt;dimension == 2) {</span>
+<span class="lineNum">      41 </span><span class="lineCov">          3 :         N = N*N;</span>
+<span class="lineNum">      42 </span>            :     }
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            :     // dynamically allocate memory for the pointers
+<span class="lineNum">      45 </span><span class="lineCov">          6 :     solver-&gt;matrix_value = (double **)malloc(N*sizeof(double *));</span>
+<span class="lineNum">      46 </span><span class="lineCov">          6 :     solver-&gt;matrix_index = (int **)malloc(N*sizeof(int *));</span>
+<span class="lineNum">      47 </span><span class="lineCov">          6 :     solver-&gt;length = (int *)calloc(N, sizeof(int));</span>
+<span class="lineNum">      48 </span><span class="lineCov">          6 :     solver-&gt;rht_vec = (double *)malloc(N*sizeof(double));</span>
+<span class="lineNum">      49 </span><span class="lineCov">          6 :     solver-&gt;sol_vec = (double *)calloc(N, sizeof(double));</span>
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span><span class="lineCov">          6 :     if(solver-&gt;output_mode == 1) {</span>
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :         printf(&quot;[debug]: initialization - function end\n\n\n&quot;);</span>
+<span class="lineNum">      53 </span>            :     }
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span><span class="lineCov">          6 :     grvy_timer_end(__func__);</span>
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span><span class="lineCov">          6 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
